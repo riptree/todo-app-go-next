@@ -1,0 +1,18 @@
+version: '3'
+
+tasks:
+  up:
+    cmds:
+      - docker compose -f api/compose.yaml up -d
+
+  down:
+    cmds:
+      - docker compose -f api/compose.yaml down
+
+  api-logs:
+    cmds:
+      - docker logs -f task-management-api
+
+  db-logs:
+    cmds:
+      - docker logs -f task-management-db
