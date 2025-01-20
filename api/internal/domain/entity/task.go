@@ -13,8 +13,8 @@ type Task struct {
 	Title       string    `bun:"title"`
 	Description string    `bun:"description"`
 	DueDate     time.Time `bun:"due_date"`
-	CreatedAt   time.Time `bun:"created_at"`
-	UpdatedAt   time.Time `bun:"updated_at"`
+	CreatedAt   time.Time `bun:"created_at,notnull,default:current_timestamp"`
+	UpdatedAt   time.Time `bun:"updated_at,notnull,default:current_timestamp"`
 }
 
 func NewTask(title string, description string, dueDate time.Time) (Task, error) {
