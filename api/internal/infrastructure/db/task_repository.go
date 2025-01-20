@@ -2,10 +2,12 @@ package db
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"task-management/internal/domain/entity"
 	"task-management/internal/domain/repository"
+	"task-management/internal/package/apperrors"
 
-	"github.com/pkg/errors"
 	"github.com/uptrace/bun"
 )
 
@@ -54,11 +56,11 @@ func (r *taskRepositoryImpl) GetTaskList(ctx context.Context, limit int, offset 
 
 	tx := GetTxOrDB(ctx, r.conn)
 	if err := tx.NewSelect().Model(&tasks).Limit(limit).Offset(offset).Scan(ctx); err != nil {
-		return []entity.Task{}, errors.WithStack(err)
+		return []entity.Task{}, err
 	}
 
 	if len(tasks) == 0 {
-		return []entity.Task{}, errors.New("not found")
+		return []entity.Task{}, apperrors.ErrNotFound
 	}
 
 	return tasks, nil
@@ -69,6 +71,9 @@ func (r *taskRepositoryImpl) GetTaskOne(ctx context.Context, taskID int) (entity
 
 	tx := GetTxOrDB(ctx, r.conn)
 	if err := tx.NewSelect().Model(&task).Where("id = ?", taskID).Scan(ctx); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return entity.Task{}, apperrors.ErrNotFound
+		}
 		return entity.Task{}, err
 	}
 

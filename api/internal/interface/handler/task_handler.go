@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 	"task-management/internal/application/service"
 	"task-management/internal/application/usecase"
 	"task-management/internal/dto"
+	"task-management/internal/package/apperrors"
 
 	"github.com/labstack/echo/v4"
 )
@@ -144,7 +146,12 @@ func (h *taskHandler) GetTaskOne(c echo.Context) error {
 	res, err := h.taskUsecase.GetTaskOne(ctx, id)
 	if err != nil {
 		h.logger.Errorf(ctx, "failed to GetTaskOne: %s", err.Error())
-		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{
+		if errors.Is(err, apperrors.ErrNotFound) {
+			return echo.NewHTTPError(http.StatusNotFound, map[string]any{
+				"message": "task not found",
+			})
+		}
+		return echo.NewHTTPError(http.StatusInternalServerError, map[string]any{
 			"message": "failed to get task",
 		})
 	}
