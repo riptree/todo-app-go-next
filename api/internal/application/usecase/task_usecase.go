@@ -37,7 +37,12 @@ func NewTaskUsecase(
 func (u *taskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRequest) error {
 
 	err := u.transaction.WithinTransaction(ctx, func(ctx context.Context) error {
-		task, err := entity.NewTask(req.Title, req.Content)
+		dueDate, err := time.Parse("2006-01-02", req.DueDate)
+		if err != nil {
+			return err
+		}
+
+		task, err := entity.NewTask(req.Title, req.Description, dueDate)
 		if err != nil {
 			return err
 		}
@@ -64,7 +69,12 @@ func (u *taskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpda
 			return err
 		}
 
-		task.UpdateTask(req.Title, req.Content)
+		dueDate, err := time.Parse("2006-01-02", req.DueDate)
+		if err != nil {
+			return err
+		}
+
+		task.UpdateTask(req.Title, req.Description, dueDate)
 
 		err = u.taskRepository.UpdateTask(ctx, &task)
 		if err != nil {
@@ -110,11 +120,12 @@ func (u *taskUsecase) GetTaskList(ctx context.Context, req dto.GetTaskListReques
 	resTasks = dto.GetTaskListResponse{
 		Tasks: lo.Map(tasks, func(t entity.Task, _ int) dto.GetTaskResponse {
 			return dto.GetTaskResponse{
-				ID:        t.ID,
-				Title:     t.Title,
-				Content:   t.Content,
-				CreatedAt: t.CreatedAt.Format(time.RFC3339),
-				UpdatedAt: t.UpdatedAt.Format(time.RFC3339),
+				ID:          t.ID,
+				Title:       t.Title,
+				Description: t.Description,
+				DueDate:     t.GetDueDateString(),
+				CreatedAt:   t.GetCreatedAtString(),
+				UpdatedAt:   t.GetUpdatedAtString(),
 			}
 		}),
 	}
@@ -131,11 +142,12 @@ func (u *taskUsecase) GetTaskOne(ctx context.Context, id int) (dto.GetTaskRespon
 	}
 
 	resTask = dto.GetTaskResponse{
-		ID:        task.ID,
-		Title:     task.Title,
-		Content:   task.Content,
-		CreatedAt: task.CreatedAt.Format(time.RFC3339),
-		UpdatedAt: task.UpdatedAt.Format(time.RFC3339),
+		ID:          task.ID,
+		Title:       task.Title,
+		Description: task.Description,
+		DueDate:     task.GetDueDateString(),
+		CreatedAt:   task.GetCreatedAtString(),
+		UpdatedAt:   task.GetUpdatedAtString(),
 	}
 
 	return resTask, nil

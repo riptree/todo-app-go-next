@@ -1,8 +1,9 @@
 package dto
 
 type CreateUpdateTaskRequest struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	DueDate     string `json:"due_date"`
 }
 
 type GetTaskListRequest struct {
@@ -15,9 +16,10 @@ type GetTaskListResponse struct {
 }
 
 type GetTaskResponse struct {
-	ID        int    `json:"id"`
-	Title     string `json:"title"`
-	Content   string `json:"content"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	DueDate     string `json:"due_date"`
+	CreatedAt   string `json:"created_at"`
+	UpdatedAt   string `json:"updated_at"`
 }
