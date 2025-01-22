@@ -1,4 +1,5 @@
 import type { Task } from "../types"
+import { TaskDeleteDialog } from "./TaskDeleteDialog"
 import { TaskEditForm } from "./TaskEditForm"
 
 export function TaskCard({ task }: { task: Task }) {
@@ -10,7 +11,10 @@ export function TaskCard({ task }: { task: Task }) {
           <p className="text-gray-600 text-sm mt-1">{task.description}</p>
           <div className="mt-2 text-sm text-gray-500">期限: {new Date(task.due_date).toLocaleDateString("ja-JP")}</div>
         </div>
-        <TaskEditForm task={task} />
+        <div className="flex gap-2">
+          <TaskEditForm task={task} />
+          <TaskDeleteDialog task={task} />
+        </div>
       </div>
     </div>
   )

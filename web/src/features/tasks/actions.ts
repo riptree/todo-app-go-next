@@ -56,6 +56,23 @@ export async function updateTask(id: number, title: string, description: string,
   }
 }
 
+export async function deleteTask(id: number) {
+  try {
+    const response = await fetch(`${process.env.API_BASE_URL}/tasks/${id}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) {
+      throw new Error("タスクの削除に失敗しました")
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error("タスク削除エラー:", error)
+    return { success: false, error: "タスクの削除中にエラーが発生しました" }
+  }
+}
+
 export async function revalidateTasks() {
   revalidateTag(TASKS_CACHE_KEY)
 }
