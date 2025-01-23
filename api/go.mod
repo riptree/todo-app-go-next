@@ -4,6 +4,7 @@ go 1.23.5
 
 require (
 	github.com/caarlos0/env/v11 v11.3.1
+	github.com/go-ozzo/ozzo-validation/v4 v4.3.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1

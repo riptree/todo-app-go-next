@@ -9,6 +9,7 @@ import (
 	"task-management/internal/dto"
 	"task-management/internal/package/apperrors"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/labstack/echo/v4"
 )
 
@@ -46,7 +47,12 @@ func (h *taskHandler) CreateTask(c echo.Context) error {
 	err := h.taskUsecase.CreateTask(ctx, params)
 	if err != nil {
 		h.logger.Errorf(ctx, "failed to CreateTask: %s", err.Error())
-		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{
+
+		if verr, ok := err.(validation.Errors); ok {
+			return respondValidationError(verr)
+		}
+
+		return echo.NewHTTPError(http.StatusInternalServerError, map[string]any{
 			"message": "failed to create task",
 		})
 	}
@@ -77,6 +83,11 @@ func (h *taskHandler) UpdateTask(c echo.Context) error {
 
 	if err := h.taskUsecase.UpdateTask(ctx, id, params); err != nil {
 		h.logger.Errorf(ctx, "failed to UpdateTask: %s", err.Error())
+
+		if verr, ok := err.(validation.Errors); ok {
+			return respondValidationError(verr)
+		}
+
 		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{
 			"message": "failed to update task",
 		})
