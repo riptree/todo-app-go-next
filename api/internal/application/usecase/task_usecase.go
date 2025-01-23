@@ -2,10 +2,12 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"task-management/internal/application/service"
 	"task-management/internal/domain/entity"
 	"task-management/internal/domain/repository"
 	"task-management/internal/dto"
+	"task-management/internal/package/apperrors"
 	"time"
 
 	"github.com/samber/lo"
@@ -113,7 +115,7 @@ func (u *taskUsecase) GetTaskList(ctx context.Context, req dto.GetTaskListReques
 	}
 
 	tasks, err := u.taskRepository.GetTaskList(ctx, l, req.Offset)
-	if err != nil {
+	if err != nil && !errors.Is(err, apperrors.ErrNotFound) {
 		return resTasks, err
 	}
 
