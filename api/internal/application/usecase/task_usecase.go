@@ -8,7 +8,7 @@ import (
 	"task-management/internal/domain/repository"
 	"task-management/internal/dto"
 	"task-management/internal/package/apperrors"
-	"time"
+	"task-management/internal/package/util"
 
 	"github.com/samber/lo"
 )
@@ -37,9 +37,12 @@ func NewTaskUsecase(
 }
 
 func (u *taskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRequest) error {
+	if err := req.Validate(); err != nil {
+		return err
+	}
 
 	err := u.transaction.WithinTransaction(ctx, func(ctx context.Context) error {
-		dueDate, err := time.Parse("2006-01-02", req.DueDate)
+		dueDate, err := util.ParseDate(req.DueDate)
 		if err != nil {
 			return err
 		}
@@ -64,6 +67,9 @@ func (u *taskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRe
 }
 
 func (u *taskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpdateTaskRequest) error {
+	if err := req.Validate(); err != nil {
+		return err
+	}
 
 	err := u.transaction.WithinTransaction(ctx, func(ctx context.Context) error {
 		task, err := u.taskRepository.GetTaskOne(ctx, id)
@@ -71,7 +77,7 @@ func (u *taskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpda
 			return err
 		}
 
-		dueDate, err := time.Parse("2006-01-02", req.DueDate)
+		dueDate, err := util.ParseDate(req.DueDate)
 		if err != nil {
 			return err
 		}
