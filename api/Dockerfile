@@ -19,12 +19,12 @@ COPY go.* ./
 RUN go mod download
 
 COPY . ./
-RUN go build -o "task-management" -ldflags="-w -s" ./cmd/api
+RUN go build -o "todo-app" -ldflags="-w -s" ./cmd/api
 
 
 # runtime continer
 FROM gcr.io/distroless/base-debian12
 
-COPY --from=builder /tmp/app/task-management /root/task-management
+COPY --from=builder /tmp/app/todo-app /root/todo-app
 
-CMD ["/root/task-management"]
+CMD ["/root/todo-app"]

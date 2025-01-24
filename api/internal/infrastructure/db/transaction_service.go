@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
-	"task-management/internal/application/service"
+	"todo-app/internal/application/service"
 
 	"github.com/pkg/errors"
 	"github.com/uptrace/bun"

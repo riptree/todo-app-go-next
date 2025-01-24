@@ -1,11 +1,11 @@
 package router
 
 import (
-	"task-management/internal/application/usecase"
-	"task-management/internal/infrastructure/db"
-	"task-management/internal/infrastructure/logger"
-	"task-management/internal/interface/handler"
-	"task-management/internal/interface/middleware"
+	"todo-app/internal/application/usecase"
+	"todo-app/internal/infrastructure/db"
+	"todo-app/internal/infrastructure/logger"
+	"todo-app/internal/interface/handler"
+	"todo-app/internal/interface/middleware"
 
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"

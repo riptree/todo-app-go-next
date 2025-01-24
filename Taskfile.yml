@@ -11,8 +11,8 @@ tasks:
 
   api-logs:
     cmds:
-      - docker logs -f task-management-api
+      - docker logs -f todo-app-api
 
   db-logs:
     cmds:
-      - docker logs -f task-management-db
+      - docker logs -f todo-app-db

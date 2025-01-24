@@ -3,8 +3,8 @@ package middleware
 import (
 	"fmt"
 	"log/slog"
-	"task-management/internal/application/service"
 	"time"
+	"todo-app/internal/application/service"
 
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"

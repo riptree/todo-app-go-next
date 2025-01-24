@@ -6,8 +6,8 @@ import (
 	"log/slog"
 	"os"
 	"runtime"
-	"task-management/internal/application/service"
 	"time"
+	"todo-app/internal/application/service"
 )
 
 type logger struct {

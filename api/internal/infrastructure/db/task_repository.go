@@ -4,9 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"task-management/internal/domain/entity"
-	"task-management/internal/domain/repository"
-	"task-management/internal/package/apperrors"
+	"todo-app/internal/domain/entity"
+	"todo-app/internal/domain/repository"
+	"todo-app/internal/package/apperrors"
 
 	"github.com/uptrace/bun"
 )

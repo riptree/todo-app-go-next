@@ -3,12 +3,12 @@ package usecase
 import (
 	"context"
 	"errors"
-	"task-management/internal/application/service"
-	"task-management/internal/domain/entity"
-	"task-management/internal/domain/repository"
-	"task-management/internal/dto"
-	"task-management/internal/package/apperrors"
-	"task-management/internal/package/util"
+	"todo-app/internal/application/service"
+	"todo-app/internal/domain/entity"
+	"todo-app/internal/domain/repository"
+	"todo-app/internal/dto"
+	"todo-app/internal/package/apperrors"
+	"todo-app/internal/package/util"
 
 	"github.com/samber/lo"
 )

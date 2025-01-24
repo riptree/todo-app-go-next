@@ -1,7 +1,7 @@
 package dto
 
 import (
-	"task-management/internal/package/global"
+	"todo-app/internal/package/global"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )

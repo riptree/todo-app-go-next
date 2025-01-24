@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"task-management/internal/domain/entity"
+	"todo-app/internal/domain/entity"
 )
 
 type TaskRepository interface {

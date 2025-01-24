@@ -1,8 +1,8 @@
 package util
 
 import (
-	"task-management/internal/package/global"
 	"time"
+	"todo-app/internal/package/global"
 )
 
 func ParseDate(date *string) (*time.Time, error) {

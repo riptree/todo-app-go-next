@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"task-management/internal/package/config"
+	"todo-app/internal/package/config"
 
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"

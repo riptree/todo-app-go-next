@@ -5,9 +5,9 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
-	"task-management/internal/infrastructure/db"
-	"task-management/internal/interface/router"
-	"task-management/internal/package/config"
+	"todo-app/internal/infrastructure/db"
+	"todo-app/internal/interface/router"
+	"todo-app/internal/package/config"
 
 	"github.com/labstack/echo/v4"
 	"github.com/pkg/errors"
