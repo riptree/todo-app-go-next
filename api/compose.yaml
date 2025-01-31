@@ -22,7 +22,7 @@ services:
       - 15434:5432
     volumes:
       - ./initdb.d:/docker-entrypoint-initdb.d
-      - db-data:/var/lib/postgresql/data
+      - todo-app-db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -34,4 +34,4 @@ services:
       retries: 3
 
 volumes:
-  db-data:
+  todo-app-db-data:
