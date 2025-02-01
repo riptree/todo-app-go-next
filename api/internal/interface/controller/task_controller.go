@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"context"
@@ -17,25 +17,25 @@ import (
 	"github.com/samber/lo"
 )
 
-type taskHandler struct {
+type taskController struct {
 	logger         service.Logger
 	transaction    service.Transaction
 	taskRepository *db.TaskRepository
 }
 
-func NewTaskHandler(
+func NewTaskController(
 	logger service.Logger,
 	transaction service.Transaction,
 	taskRepository *db.TaskRepository,
-) *taskHandler {
-	return &taskHandler{
+) *taskController {
+	return &taskController{
 		logger:         logger,
 		transaction:    transaction,
 		taskRepository: taskRepository,
 	}
 }
 
-func (h *taskHandler) CreateTask(c echo.Context) error {
+func (h *taskController) CreateTask(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	var params dto.CreateUpdateTaskRequest
@@ -88,7 +88,7 @@ func (h *taskHandler) CreateTask(c echo.Context) error {
 	})
 }
 
-func (h *taskHandler) UpdateTask(c echo.Context) error {
+func (h *taskController) UpdateTask(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -151,7 +151,7 @@ func (h *taskHandler) UpdateTask(c echo.Context) error {
 	})
 }
 
-func (h *taskHandler) DeleteTask(c echo.Context) error {
+func (h *taskController) DeleteTask(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -175,7 +175,7 @@ func (h *taskHandler) DeleteTask(c echo.Context) error {
 	})
 }
 
-func (h *taskHandler) GetTaskList(c echo.Context) error {
+func (h *taskController) GetTaskList(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	var params dto.GetTaskListRequest
@@ -220,7 +220,7 @@ func (h *taskHandler) GetTaskList(c echo.Context) error {
 	return c.JSON(http.StatusOK, res)
 }
 
-func (h *taskHandler) GetTaskOne(c echo.Context) error {
+func (h *taskController) GetTaskOne(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	id, err := strconv.Atoi(c.Param("id"))

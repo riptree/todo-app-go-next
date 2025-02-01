@@ -3,7 +3,7 @@ package router
 import (
 	"todo-app/internal/infrastructure/db"
 	"todo-app/internal/infrastructure/logger"
-	"todo-app/internal/interface/handler"
+	"todo-app/internal/interface/controller"
 	"todo-app/internal/interface/middleware"
 
 	"github.com/labstack/echo/v4"
@@ -16,15 +16,15 @@ func Init(e *echo.Echo, bunDB *bun.DB) {
 	taskRepository := db.NewTaskRepository(bunDB)
 	logger := logger.NewLogger()
 
-	taskHandler := handler.NewTaskHandler(logger, transaction, taskRepository)
+	taskController := controller.NewTaskController(logger, transaction, taskRepository)
 
 	loggerMiddleware := middleware.NewLoggerMiddleware(logger)
 
 	e.Use(loggerMiddleware.Logger())
 
-	e.POST("/tasks", taskHandler.CreateTask)
-	e.GET("/tasks", taskHandler.GetTaskList)
-	e.GET("/tasks/:id", taskHandler.GetTaskOne)
-	e.PUT("/tasks/:id", taskHandler.UpdateTask)
-	e.DELETE("/tasks/:id", taskHandler.DeleteTask)
+	e.POST("/tasks", taskController.CreateTask)
+	e.GET("/tasks", taskController.GetTaskList)
+	e.GET("/tasks/:id", taskController.GetTaskOne)
+	e.PUT("/tasks/:id", taskController.UpdateTask)
+	e.DELETE("/tasks/:id", taskController.DeleteTask)
 }
