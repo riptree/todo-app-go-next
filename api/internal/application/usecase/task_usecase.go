@@ -5,8 +5,8 @@ import (
 	"errors"
 	"todo-app/internal/application/service"
 	"todo-app/internal/domain/entity"
-	"todo-app/internal/domain/repository"
 	"todo-app/internal/dto"
+	"todo-app/internal/infrastructure/db"
 	"todo-app/internal/package/apperrors"
 	"todo-app/internal/package/util"
 
@@ -15,12 +15,12 @@ import (
 
 type TaskUsecase struct {
 	transaction    service.Transaction
-	taskRepository repository.TaskRepository
+	taskRepository *db.TaskRepository
 }
 
 func NewTaskUsecase(
 	transaction service.Transaction,
-	taskRepository repository.TaskRepository,
+	taskRepository *db.TaskRepository,
 ) *TaskUsecase {
 	return &TaskUsecase{
 		transaction:    transaction,

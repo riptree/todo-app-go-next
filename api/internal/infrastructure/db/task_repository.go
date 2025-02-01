@@ -5,23 +5,22 @@ import (
 	"database/sql"
 	"errors"
 	"todo-app/internal/domain/entity"
-	"todo-app/internal/domain/repository"
 	"todo-app/internal/package/apperrors"
 
 	"github.com/uptrace/bun"
 )
 
-type taskRepositoryImpl struct {
+type TaskRepository struct {
 	conn *bun.DB
 }
 
-func NewTaskRepository(conn *bun.DB) repository.TaskRepository {
-	return &taskRepositoryImpl{
+func NewTaskRepository(conn *bun.DB) *TaskRepository {
+	return &TaskRepository{
 		conn: conn,
 	}
 }
 
-func (r *taskRepositoryImpl) CreateTask(ctx context.Context, task *entity.Task) (int, error) {
+func (r *TaskRepository) CreateTask(ctx context.Context, task *entity.Task) (int, error) {
 	tx := GetTxOrDB(ctx, r.conn)
 	_, err := tx.NewInsert().Model(task).Exec(ctx)
 	if err != nil {
@@ -31,7 +30,7 @@ func (r *taskRepositoryImpl) CreateTask(ctx context.Context, task *entity.Task) 
 	return task.ID, nil
 }
 
-func (r *taskRepositoryImpl) UpdateTask(ctx context.Context, task *entity.Task) error {
+func (r *TaskRepository) UpdateTask(ctx context.Context, task *entity.Task) error {
 	tx := GetTxOrDB(ctx, r.conn)
 	_, err := tx.NewUpdate().Model(task).WherePK().Exec(ctx)
 	if err != nil {
@@ -41,7 +40,7 @@ func (r *taskRepositoryImpl) UpdateTask(ctx context.Context, task *entity.Task) 
 	return nil
 }
 
-func (r *taskRepositoryImpl) DeleteTask(ctx context.Context, taskID int) error {
+func (r *TaskRepository) DeleteTask(ctx context.Context, taskID int) error {
 	tx := GetTxOrDB(ctx, r.conn)
 	_, err := tx.NewDelete().Model(&entity.Task{}).Where("id = ?", taskID).Exec(ctx)
 	if err != nil {
@@ -51,7 +50,7 @@ func (r *taskRepositoryImpl) DeleteTask(ctx context.Context, taskID int) error {
 	return nil
 }
 
-func (r *taskRepositoryImpl) GetTaskList(ctx context.Context, limit int, offset int) ([]entity.Task, error) {
+func (r *TaskRepository) GetTaskList(ctx context.Context, limit int, offset int) ([]entity.Task, error) {
 	tasks := make([]entity.Task, 0, limit)
 
 	tx := GetTxOrDB(ctx, r.conn)
@@ -66,7 +65,7 @@ func (r *taskRepositoryImpl) GetTaskList(ctx context.Context, limit int, offset 
 	return tasks, nil
 }
 
-func (r *taskRepositoryImpl) GetTaskOne(ctx context.Context, taskID int) (entity.Task, error) {
+func (r *TaskRepository) GetTaskOne(ctx context.Context, taskID int) (entity.Task, error) {
 	var task entity.Task
 
 	tx := GetTxOrDB(ctx, r.conn)
