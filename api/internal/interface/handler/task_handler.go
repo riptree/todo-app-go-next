@@ -13,20 +13,12 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type TaskHandler interface {
-	CreateTask(c echo.Context) error
-	UpdateTask(c echo.Context) error
-	DeleteTask(c echo.Context) error
-	GetTaskList(c echo.Context) error
-	GetTaskOne(c echo.Context) error
-}
-
 type taskHandler struct {
 	logger      service.Logger
 	taskUsecase usecase.TaskUsecase
 }
 
-func NewTaskHandler(logger service.Logger, taskUsecase usecase.TaskUsecase) TaskHandler {
+func NewTaskHandler(logger service.Logger, taskUsecase usecase.TaskUsecase) *taskHandler {
 	return &taskHandler{
 		logger:      logger,
 		taskUsecase: taskUsecase,
