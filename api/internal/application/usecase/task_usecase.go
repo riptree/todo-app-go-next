@@ -13,15 +13,7 @@ import (
 	"github.com/samber/lo"
 )
 
-type TaskUsecase interface {
-	CreateTask(ctx context.Context, req dto.CreateUpdateTaskRequest) error
-	UpdateTask(ctx context.Context, id int, req dto.CreateUpdateTaskRequest) error
-	DeleteTask(ctx context.Context, id int) error
-	GetTaskList(ctx context.Context, req dto.GetTaskListRequest) (dto.GetTaskListResponse, error)
-	GetTaskOne(ctx context.Context, id int) (dto.GetTaskResponse, error)
-}
-
-type taskUsecase struct {
+type TaskUsecase struct {
 	transaction    service.Transaction
 	taskRepository repository.TaskRepository
 }
@@ -29,14 +21,14 @@ type taskUsecase struct {
 func NewTaskUsecase(
 	transaction service.Transaction,
 	taskRepository repository.TaskRepository,
-) TaskUsecase {
-	return &taskUsecase{
+) *TaskUsecase {
+	return &TaskUsecase{
 		transaction:    transaction,
 		taskRepository: taskRepository,
 	}
 }
 
-func (u *taskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRequest) error {
+func (u *TaskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRequest) error {
 	if err := req.Validate(); err != nil {
 		return err
 	}
@@ -66,7 +58,7 @@ func (u *taskUsecase) CreateTask(ctx context.Context, req dto.CreateUpdateTaskRe
 	return nil
 }
 
-func (u *taskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpdateTaskRequest) error {
+func (u *TaskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpdateTaskRequest) error {
 	if err := req.Validate(); err != nil {
 		return err
 	}
@@ -98,7 +90,7 @@ func (u *taskUsecase) UpdateTask(ctx context.Context, id int, req dto.CreateUpda
 	return nil
 }
 
-func (u *taskUsecase) DeleteTask(ctx context.Context, id int) error {
+func (u *TaskUsecase) DeleteTask(ctx context.Context, id int) error {
 
 	err := u.taskRepository.DeleteTask(ctx, id)
 	if err != nil {
@@ -108,7 +100,7 @@ func (u *taskUsecase) DeleteTask(ctx context.Context, id int) error {
 	return nil
 }
 
-func (u *taskUsecase) GetTaskList(ctx context.Context, req dto.GetTaskListRequest) (dto.GetTaskListResponse, error) {
+func (u *TaskUsecase) GetTaskList(ctx context.Context, req dto.GetTaskListRequest) (dto.GetTaskListResponse, error) {
 
 	resTasks := dto.GetTaskListResponse{
 		Tasks: []dto.GetTaskResponse{},
@@ -141,7 +133,7 @@ func (u *taskUsecase) GetTaskList(ctx context.Context, req dto.GetTaskListReques
 	return resTasks, nil
 }
 
-func (u *taskUsecase) GetTaskOne(ctx context.Context, id int) (dto.GetTaskResponse, error) {
+func (u *TaskUsecase) GetTaskOne(ctx context.Context, id int) (dto.GetTaskResponse, error) {
 	var resTask dto.GetTaskResponse
 
 	task, err := u.taskRepository.GetTaskOne(ctx, id)

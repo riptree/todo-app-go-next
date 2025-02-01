@@ -15,10 +15,10 @@ import (
 
 type taskHandler struct {
 	logger      service.Logger
-	taskUsecase usecase.TaskUsecase
+	taskUsecase *usecase.TaskUsecase
 }
 
-func NewTaskHandler(logger service.Logger, taskUsecase usecase.TaskUsecase) *taskHandler {
+func NewTaskHandler(logger service.Logger, taskUsecase *usecase.TaskUsecase) *taskHandler {
 	return &taskHandler{
 		logger:      logger,
 		taskUsecase: taskUsecase,
