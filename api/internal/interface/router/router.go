@@ -1,7 +1,6 @@
 package router
 
 import (
-	"todo-app/internal/application/usecase"
 	"todo-app/internal/infrastructure/db"
 	"todo-app/internal/infrastructure/logger"
 	"todo-app/internal/interface/handler"
@@ -17,9 +16,7 @@ func Init(e *echo.Echo, bunDB *bun.DB) {
 	taskRepository := db.NewTaskRepository(bunDB)
 	logger := logger.NewLogger()
 
-	taskUsecase := usecase.NewTaskUsecase(transaction, taskRepository)
-
-	taskHandler := handler.NewTaskHandler(logger, taskUsecase)
+	taskHandler := handler.NewTaskHandler(logger, transaction, taskRepository)
 
 	loggerMiddleware := middleware.NewLoggerMiddleware(logger)
 
