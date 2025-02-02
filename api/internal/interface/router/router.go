@@ -25,6 +25,7 @@ func Init(e *echo.Echo, bunDB *bun.DB) {
 	e.POST("/tasks", taskController.CreateTask)
 	e.GET("/tasks", taskController.GetTaskList)
 	e.GET("/tasks/:id", taskController.GetTaskOne)
-	e.PUT("/tasks/:id", taskController.UpdateTask)
+	e.PUT("/tasks/:id", taskController.PutUpdateTask)
+	e.PATCH("/tasks/:id", taskController.PatchUpdateTask)
 	e.DELETE("/tasks/:id", taskController.DeleteTask)
 }

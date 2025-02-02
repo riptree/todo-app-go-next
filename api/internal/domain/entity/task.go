@@ -1,7 +1,9 @@
 package entity
 
 import (
+	"fmt"
 	"time"
+	"todo-app/internal/package/util"
 
 	"github.com/uptrace/bun"
 )
@@ -29,6 +31,47 @@ func (t *Task) UpdateTask(title string, description *string, dueDate *time.Time)
 	t.Title = title
 	t.Description = description
 	t.DueDate = dueDate
+}
+
+func (t *Task) PatchUpdateTask(m map[string]any) error {
+	if title, ok := m["title"]; ok {
+		var valid bool
+		t.Title, valid = title.(string)
+		if !valid {
+			return fmt.Errorf("invalid title")
+		}
+	}
+
+	if description, ok := m["description"]; ok {
+		if description == nil {
+			t.Description = nil
+		} else {
+			descriptionString, valid := description.(string)
+			if !valid {
+				return fmt.Errorf("invalid description")
+			}
+			t.Description = &descriptionString
+		}
+	}
+
+	if dueDate, ok := m["due_date"]; ok {
+		if dueDate == nil {
+			t.DueDate = nil
+		} else {
+			dueDateString, valid := dueDate.(string)
+			if !valid {
+				return fmt.Errorf("invalid due_date")
+			}
+
+			dueDate, err := util.ParseDate(&dueDateString)
+			if err != nil {
+				return err
+			}
+			t.DueDate = dueDate
+		}
+	}
+
+	return nil
 }
 
 func (t *Task) IsDue() bool {

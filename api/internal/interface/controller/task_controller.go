@@ -88,7 +88,7 @@ func (h *taskController) CreateTask(c echo.Context) error {
 	})
 }
 
-func (h *taskController) UpdateTask(c echo.Context) error {
+func (h *taskController) PutUpdateTask(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	id, err := strconv.Atoi(c.Param("id"))
@@ -131,6 +131,55 @@ func (h *taskController) UpdateTask(c echo.Context) error {
 		}
 
 		task.UpdateTask(params.Title, params.Description, dueDate)
+
+		err = h.taskRepository.UpdateTask(ctx, &task)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		h.logger.Errorf(ctx, "failed to CreateTask: %s", err.Error())
+		return echo.NewHTTPError(http.StatusInternalServerError, map[string]any{
+			"message": "failed to update task",
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]any{
+		"message": "success",
+	})
+}
+
+func (h *taskController) PatchUpdateTask(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		h.logger.Errorf(ctx, "failed to parse id: %s", err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{
+			"message": "invalid id",
+		})
+	}
+
+	var requestMap map[string]interface{}
+	if err := c.Bind(&requestMap); err != nil {
+		h.logger.Errorf(ctx, "failed to bind request body: %s", err.Error())
+		return echo.NewHTTPError(http.StatusBadRequest, map[string]any{
+			"message": "bad request",
+		})
+	}
+
+	err = h.transaction.WithinTransaction(ctx, func(ctx context.Context) error {
+		task, err := h.taskRepository.GetTaskOne(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		err = task.PatchUpdateTask(requestMap)
+		if err != nil {
+			return err
+		}
 
 		err = h.taskRepository.UpdateTask(ctx, &task)
 		if err != nil {
