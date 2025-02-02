@@ -2,7 +2,7 @@
 
 import { revalidateTag } from "next/cache"
 
-import { TASKS_CACHE_KEY } from "./constants"
+import { TASKS_CACHE_KEY, getTaskCacheKey } from "./constants"
 
 export async function createTask(title: string, description: string, due_date: Date) {
   try {
@@ -75,6 +75,10 @@ export async function deleteTask(id: number) {
 
 export async function revalidateTasks() {
   revalidateTag(TASKS_CACHE_KEY)
+}
+
+export async function revalidateTask(id: number) {
+  revalidateTag(getTaskCacheKey(id))
 }
 
 const formatDate = (date: Date) => {
